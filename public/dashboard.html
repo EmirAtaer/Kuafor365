@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Müşteri Paneli | Kuaför Randevu</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- ÜST BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="logo-icon">✂️</div>
+          <div>
+            <div class="topbar-title">Müşteri Paneli</div>
+            <div class="topbar-subtitle">
+              Hoş geldin, <span id="welcome-name">Müşteri</span>
+            </div>
+          </div>
+        </div>
+        <button id="logout-btn" class="outline-btn">
+          ⤴ Çıkış Yap
+        </button>
+      </header>
+
+      <!-- ANA İÇERİK -->
+      <main>
+        <!-- RANDEVULARIM -->
+        <section class="section-card section-appointments">
+          <div class="section-header">
+            <div>
+              <h2>Randevularım</h2>
+              <p>Randevularınızı görüntüleyin ve yönetin.</p>
+            </div>
+            <button id="open-modal-btn" class="primary-btn">
+              + Yeni Randevu
+            </button>
+          </div>
+
+          <div id="appointments-container" class="appointments-container">
+            <!-- JS dolduracak -->
+          </div>
+        </section>
+<!-- (Hizmet ve Fiyatlar bölümü kaldırıldı) -->
+<!-- (Ürünler ve Fiyatlar bölümü yeni randevu modalına taşındı) -->
+
+        <!-- İLETİŞİM / FOOTER PANELİ -->
+        <section class="section-card section-contact">
+          <div class="section-header">
+            <div>
+              <h2>Bize Ulaşın</h2>
+              <p>Kuaförünüzün konumunu ve iletişim bilgilerini görün.</p>
+            </div>
+          </div>
+
+          <div class="contact-grid">
+            <!-- Sol taraf: iletişim bilgileri -->
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-label">Salon Adı</div>
+                <div class="contact-value">H&F KARADAŞ Hair Artist</div>
+              </div>
+
+              <div class="contact-item">
+                <div class="contact-label">Adres</div>
+                <div class="contact-value">
+                  Hamitler, Nene Hatun Cd. No:16, 16160 Osmangazi/Bursa
+                </div>
+              </div>
+
+              <div class="contact-item">
+                <div class="contact-label">Telefon</div>
+                <div class="contact-value">
+                  <a href="tel:+905551112233">+90 555 111 22 33</a>
+                </div>
+              </div>
+
+              <div class="contact-actions">
+                <a href="tel:+905551112233" class="contact-btn contact-btn-phone">
+                  📞 Telefon Et
+                </a>
+                <a
+                  href="https://wa.me/905551112233"
+                  target="_blank"
+                  class="contact-btn contact-btn-whatsapp"
+                >
+                  💬 WhatsApp
+                </a>
+              </div>
+            </div>
+
+            <!-- Sağ taraf: harita -->
+            <div class="contact-map">
+              <iframe
+                src="https://www.google.com/maps?q=Hamitler%2C%20Nene%20Hatun%20Cd.%20No%3A16%2C%2016160%20Osmangazi%2FBursa&z=16&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    
+    <!-- YENİ RANDEVU MODAL -->
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h3>Yeni Randevu Oluştur</h3>
+            <p>Randevu bilgilerinizi girin</p>
+          </div>
+          <button id="close-modal-btn" class="modal-close-btn">✕</button>
+        </div>
+
+        <form id="modal-form" class="modal-form">
+          <!-- HİZMET SEÇİMİ -->
+          <div class="form-group">
+            <label for="service-select">Hizmetler</label>
+
+            <div class="service-row">
+              <select id="service-select" required>
+                <option value="">Hizmet seçin</option>
+                <!-- JS tarafından doldurulacak -->
+              </select>
+
+              <!-- Formu submit etmesin diye type="button" -->
+              <button type="button" id="add-service-btn" class="secondary-btn">
+                + Hizmet Ekle
+              </button>
+            </div>
+
+            <!-- Seçilen hizmet etiketleri buraya gelecek -->
+            <div id="selected-services" class="selected-services">
+              <!-- JS ile doldurulacak -->
+            </div>
+            <div style="margin-top:8px;">
+              <strong>Hizmet Toplamı: </strong> <span id="service-total">0 ₺</span>
+            </div>
+          </div>
+
+          <!-- ÜRÜNLER VE FİYATLAR -->
+          <div class="form-group">
+            <label>Ürünler ve Fiyatlar</label>
+            <p style="font-size:0.85rem; color:#6b7280; margin-bottom:12px;">Salonumuzda satılan ürünler</p>
+            
+            <div id="products-grid" class="products-grid">
+              <!-- JS dolduracak -->
+            </div>
+            
+            <div id="selected-products" class="selected-services" style="margin-top:12px;">
+              <!-- Seçili ürünler burada gösterilecek -->
+            </div>
+            <div style="margin-top:8px;">
+              <strong>Ürün Toplamı: </strong> <span id="product-total">0 ₺</span>
+            </div>
+          </div>
+
+          <!-- GENEL TOPLAM -->
+          <div class="form-group" style="background:#f3f4f6; padding:12px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:1.1rem;">Genel Toplam:</strong>
+              <strong id="grand-total" style="font-size:1.3rem; color:#059669;">0 ₺</strong>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Tarih</label>
+              <input type="date" id="date" required />
+            </div>
+            <div class="form-group">
+  <label for="time">Saat</label>
+  <select id="time" required>
+    <option value="">Saat seçin</option>
+    <option value="09:00">09:00</option>
+    <option value="10:00">10:00</option>
+    <option value="11:00">11:00</option>
+    <option value="12:00">12:00</option>
+    <option value="13:00">13:00</option>
+    <option value="14:00">14:00</option>
+    <option value="15:00">15:00</option>
+    <option value="16:00">16:00</option>
+    <option value="17:00">17:00</option>
+    <option value="18:00">18:00</option>
+    <option value="19:00">19:00</option>
+    <option value="20:00">20:00</option>
+  </select>
+</div>
+
+
+          </div>
+
+          <div class="form-group">
+            <label for="modal-notes">Notlar (Opsiyonel)</label>
+            <textarea
+              id="modal-notes"
+              rows="3"
+              placeholder="Eklemek istediğiniz notlar"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="primary-btn full-width">
+            Randevu Oluştur
+          </button>
+        </form>
+
+        <p id="modal-message" class="modal-message"></p>
+      </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+  </body>
+</html>

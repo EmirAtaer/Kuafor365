@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kuaför Paneli</title>
+
+    <!-- Kuaför sayfasına özel CSS -->
+    <link rel="stylesheet" href="barber.css" />
+
+    <!-- Chart.js (analitik grafikler için) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  </head>
+  <body>
+    <div class="page">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <span class="logo-icon">✂️</span>
+          <div>
+            <div class="topbar-title">Kuaför Paneli</div>
+            <div class="topbar-subtitle">
+              Hoş geldin <span id="welcome-name">Kuaför</span>
+            </div>
+          </div>
+        </div>
+        <button id="logout-btn" class="outline-btn">Çıkış Yap</button>
+      </header>
+
+      <!-- ÜST İSTATİSTİK KARTLARI -->
+      <section class="section-card">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Toplam Randevu</div>
+            <div id="stat-total-appointments" class="stat-value">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Bekleyen Randevu</div>
+            <div id="stat-pending-appointments" class="stat-value">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Toplam Ürün</div>
+            <div id="stat-total-products" class="stat-value">0</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB NAV -->
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-appointments">
+          Randevular
+        </button>
+        <button class="tab-btn" data-tab="tab-products">Ürünler</button>
+        <button class="tab-btn" data-tab="tab-services">Hizmetler</button>
+        <button class="tab-btn" data-tab="tab-analytics">Analitik</button>
+      </div>
+
+      <!-- ================= RANDEVULAR SEKME ================= -->
+      <section id="tab-appointments" class="tab-section active">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>Randevu Yönetimi</h2>
+              <p>Müşteri randevularını görüntüleyin ve yönetin.</p>
+            </div>
+          </div>
+
+          <div class="day-status-bar">
+      <div class="day-status-left">
+        <label for="day-status-date">Gün durumu</label>
+        <input type="date" id="day-status-date" />
+      </div>
+      <div class="day-status-right">
+        <span id="day-status-label" class="chip chip-soft">
+          Gün durumu yükleniyor...
+        </span>
+        <button id="toggle-day-status-btn" class="outline-btn small">
+          Günü Kapat
+        </button>
+      </div>
+    </div>
+    <div class="time-slots-card">
+  <div class="time-slots-header">
+    <h3>Seçili Gün İçin Saatler</h3>
+    <span id="time-slots-date-label" class="chip chip-soft"></span>
+  </div>
+
+  <div id="time-slots-grid" class="time-slots-grid">
+    <!-- JS dolduracak -->
+  </div>
+
+  <div class="time-slots-legend">
+    <span>
+      <span class="slot-pill slot-free"></span> Uygun
+    </span>
+    <span>
+      <span class="slot-pill slot-busy"></span> Dolu
+    </span>
+    <span>
+      <span class="slot-pill slot-closed"></span> Kapalı
+    </span>
+  </div>
+</div>
+
+
+          <!-- Aktif randevular -->
+          <div id="appointments-container" class="appointments-container">
+            <!-- JS dolduracak -->
+          </div>
+        </div>
+
+        <!-- Tamamlanan randevular -->
+        <div class="section-card section-completed">
+          <div class="section-header">
+            <div>
+              <h2>Tamamlanan Randevular</h2>
+              <p>İşlemi tamamlanan randevular burada listelenir.</p>
+            </div>
+          </div>
+          <div
+            id="completed-appointments-container"
+            class="appointments-container completed-appointments-container"
+          >
+            <!-- JS dolduracak -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ÜRÜNLER SEKME ================= -->
+      <section id="tab-products" class="tab-section">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>Ürün Yönetimi</h2>
+              <p>Ürünleri görüntüleyin, stok ve kullanım takibi yapın.</p>
+            </div>
+            <button id="new-product-btn" class="primary-btn">+ Yeni Ürün</button>
+          </div>
+
+          <!-- Yeni ürün formu -->
+          <div id="new-product-form" class="new-product-form hidden">
+            <div class="new-product-grid">
+              <div class="form-group">
+                <label for="prod-name">Ürün Adı</label>
+                <input
+                  id="prod-name"
+                  type="text"
+                  placeholder="Örn: Premium Şampuan"
+                />
+              </div>
+              <div class="form-group">
+                <label for="prod-category">Kategori</label>
+                <input
+                  id="prod-category"
+                  type="text"
+                  placeholder="Örn: Saç bakımı"
+                />
+              </div>
+              <div class="form-group">
+                <label for="prod-price">Fiyat (₺)</label>
+                <input id="prod-price" type="number" min="0" step="0.01" />
+              </div>
+              <div class="form-group">
+                <label for="prod-stock">Başlangıç Stok</label>
+                <input id="prod-stock" type="number" min="0" />
+              </div>
+            </div>
+            <button id="add-product-btn" class="primary-btn small">
+              Ürünü Kaydet
+            </button>
+            <p id="product-message" class="form-message"></p>
+          </div>
+
+          <!-- Ürün kartları -->
+          <div id="products-grid" class="products-grid">
+            <!-- JS dolduracak -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= HİZMETLER SEKME ================= -->
+      <section id="tab-services" class="tab-section">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2>Hizmet Yönetimi</h2>
+              <p>Hizmetleri görüntüleyin, fiyat ve süre düzenlemesi yapın.</p>
+            </div>
+            <button id="new-service-btn" class="primary-btn">+ Yeni Hizmet</button>
+          </div>
+
+          <!-- Yeni servis formu -->
+          <div id="new-service-form" class="new-product-form hidden">
+            <div class="new-product-grid">
+              <div class="form-group">
+                <label for="service-name">Hizmet Adı</label>
+                <input id="service-name" type="text" placeholder="Örn: Saç Kesimi" />
+              </div>
+              <div class="form-group">
+                <label for="service-price">Fiyat (₺)</label>
+                <input id="service-price" type="number" min="0" step="0.01" />
+              </div>
+              <div class="form-group">
+                <label for="service-duration">Süre (dakika)</label>
+                <input id="service-duration" type="number" min="0" />
+              </div>
+            </div>
+            <button id="add-service-btn" class="primary-btn small">Hizmeti Kaydet</button>
+            <p id="service-message" class="form-message"></p>
+          </div>
+
+          <!-- Hizmet kartları -->
+          <div id="services-grid" class="products-grid">
+            <!-- JS dolduracak -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ANALİTİK SEKME ================= -->
+      <section id="tab-analytics" class="tab-section">
+        <div class="analytics-header">
+          <div>
+            <h2>Analitik ve İstatistikler</h2>
+            <p>İşletmenize ait özet verileri ve ürün performansını inceleyin.</p>
+          </div>
+          <div class="analytics-filters">
+            <label for="analytics-week-start">Hafta başlangıcı</label>
+            <input type="date" id="analytics-week-start" />
+            <button id="analytics-refresh" class="outline-btn small">Haftayı Göster</button>
+          </div>
+        </div>
+
+        <div class="analytics-layout">
+          <!-- SOL TARAF: ÖZET KARTLAR + GRAFİKLER -->
+          <div class="analytics-left">
+            <div class="stats-grid analytics-stats-row">
+              <div class="stat-card soft">
+                <div class="stat-title">Toplam Ürün Kullanımı</div>
+                <div id="stat-total-usage" class="stat-value">0</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Düşük Stoklu Ürünler</div>
+                <div
+                  id="stat-low-stock-analytics"
+                  class="stat-value"
+                >
+                  0
+                </div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Toplam Randevu</div>
+                <div
+                  id="stat-total-appointments-analytics"
+                  class="stat-value"
+                >
+                  0
+                </div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Haftalık Gelir</div>
+                <div id="stat-weekly-revenue" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Haftalık Hizmet Geliri</div>
+                <div id="stat-weekly-service-revenue" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Haftalık Ürün Geliri</div>
+                <div id="stat-weekly-product-revenue" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Aylık Gelir</div>
+                <div id="stat-monthly-revenue" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Aylık Hizmet Geliri</div>
+                <div id="stat-monthly-service-revenue" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Aylık Ürün Geliri</div>
+                <div id="stat-monthly-product-revenue" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Haftalık Gider</div>
+                <div id="stat-weekly-expense" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Aylık Gider</div>
+                <div id="stat-monthly-expense" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">En Yoğun Gün</div>
+                <div id="stat-busiest-day" class="stat-value">-</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Haftalık Net</div>
+                <div id="stat-weekly-net" class="stat-value">0 ₺</div>
+              </div>
+              <div class="stat-card soft">
+                <div class="stat-title">Aylık Net</div>
+                <div id="stat-monthly-net" class="stat-value">0 ₺</div>
+              </div>
+            </div>
+
+            <div class="chart-card large">
+              <div class="chart-card-header">
+                <h3>Günlere Göre Randevu</h3>
+                <span class="chip chip-soft">Haftalık görünüm</span>
+              </div>
+              <canvas id="chart-daily"></canvas>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <h3>Saatlere Göre Randevu</h3>
+                <span class="chip chip-soft">Yoğunluk saatleri</span>
+              </div>
+              <canvas id="chart-hourly"></canvas>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <h3>Gelir / Gider</h3>
+                <span class="chip chip-soft">Son 30 gün</span>
+              </div>
+              <canvas id="chart-revenue-expense"></canvas>
+            </div>
+          </div>
+
+          <!-- SAĞ TARAF: TOP ÜRÜNLER + TABLO -->
+          <!-- SAĞ TARAF: TOP ÜRÜNLER + HİZMET PASTA GRAFİĞİ + TABLO -->
+<div class="analytics-right">
+  <!-- En çok kullanılan ürünler -->
+  <div class="chart-card">
+    <div class="chart-card-header">
+      <h3>En Çok Kullanılan Ürünler</h3>
+      <span class="chip chip-accent">Top 5</span>
+    </div>
+    <canvas id="chart-top-products"></canvas>
+  </div>
+
+  <!-- HİZMET TERCİH DAĞILIMI (PASTA GRAFİĞİ) -->
+  <div class="chart-card">
+    <div class="chart-card-header">
+      <h3>Hizmet Tercih Dağılımı</h3>
+      <span class="chip chip-soft">Hangi hizmet daha popüler?</span>
+    </div>
+    <canvas id="chart-service-pie"></canvas>
+  </div>
+
+  <!-- Gider yönetimi kartı -->
+  <div class="chart-card">
+    <div class="chart-card-header">
+      <h3>Gider Yönetimi</h3>
+      <span class="chip chip-soft">Gider ekle ve listele</span>
+    </div>
+    <div class="chart-card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="expense-amount">Tutar (₺)</label>
+          <input id="expense-amount" type="number" min="0" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label for="expense-category">Kategori</label>
+          <input id="expense-category" type="text" placeholder="Kira/Elektrik/Ürün Alım" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="expense-date">Tarih</label>
+          <input id="expense-date" type="date" />
+        </div>
+        <div class="form-group">
+          <label for="expense-notes">Not</label>
+          <input id="expense-notes" type="text" />
+        </div>
+      </div>
+      <div class="form-row">
+        <button id="add-expense-btn" class="primary-btn small">Gider Ekle</button>
+      </div>
+      <div id="expenses-grid" class="products-grid" style="margin-top:12px;">
+        <!-- expenses list will populate -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Ürün özeti tablosu -->
+  <div class="analytics-table-card">
+    <div class="chart-card-header">
+      <h3>Ürün Özeti</h3>
+      <span class="chip chip-soft">Stok &amp; kullanım</span>
+    </div>
+    <div class="table-scroll">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>Ürün</th>
+            <th>Kategori</th>
+            <th>Stok</th>
+            <th>Kullanım</th>
+            <th>Fiyat</th>
+          </tr>
+        </thead>
+        <tbody id="products-table-body">
+          <!-- JS dolduracak -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- JS en sonda, defer ile -->
+    <script src="barber-dashboard.js" defer></script>
+  </body>
+</html>

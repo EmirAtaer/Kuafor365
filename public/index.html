@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kuaför Randevu | Giriş</title>
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- SOL TARAF -->
+      <section class="hero">
+        <div class="hero-icon">✂️</div>
+        <h1 class="hero-title">Kuaför Randevu</h1>
+        <p class="hero-subtitle">
+          Modern kuaför yönetim sistemi. <br />
+          Randevularınızı kolayca oluşturun ve yönetin.
+        </p>
+
+        <ul class="hero-features">
+          <li>✨ Kolay Randevu</li>
+          <li>📦 Stok Takibi (geliştirilebilir)</li>
+          <li>📊 Profesyonel Yönetim</li>
+        </ul>
+      </section>
+
+      <!-- SAĞ TARAF: GİRİŞ / KAYIT KARTI -->
+      <section class="auth-wrapper">
+        <div class="auth-card">
+          <h2>Hoş Geldiniz</h2>
+          <p class="auth-text">
+            Hesabınıza giriş yapın veya yeni hesap oluşturun.
+          </p>
+
+          <!-- Rol seçimi -->
+          <div class="toggle-group" id="role-toggle">
+            <button class="toggle-btn active" data-role="customer">
+              Müşteri
+            </button>
+            <button class="toggle-btn" data-role="barber">Kuaför</button>
+          </div>
+
+          <!-- Giriş / Kayıt seçimi -->
+          <div class="toggle-group" id="mode-toggle">
+            <button class="toggle-btn active" data-mode="login">
+              Giriş Yap
+            </button>
+            <button class="toggle-btn" data-mode="register">Kayıt Ol</button>
+          </div>
+
+          <!-- FORM -->
+          <form id="auth-form" class="auth-form">
+            <div class="form-group form-group-name">
+              <label for="fullName">Ad Soyad</label>
+              <input
+                type="text"
+                id="fullName"
+                placeholder="Adınızı ve soyadınızı girin"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-posta</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="ornek@email.com"
+                required
+              />
+            </div>
+
+            <div class="form-group form-group-phone">
+              <label for="phone">Telefon (isteğe bağlı)</label>
+              <input
+                type="tel"
+                id="phone"
+                placeholder="05xx xxx xx xx"
+              />
+            </div>
+
+            <!-- ✅ YENİ: Kuaför Davet Kodu (sadece Kuaför + Kayıt Ol iken gösterilecek) -->
+            <div class="form-group" id="barber-code-group" style="display: none;">
+              <label for="inviteCode">Kuaför Davet Kodu</label>
+              <input
+                type="text"
+                id="inviteCode"
+                placeholder="Örn: KUAFOR-ABC-123"
+              />
+            </div>
+            <!-- ✅ YENİ BİTİŞ -->
+
+            <div class="form-group">
+              <label for="password">Şifre</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Şifrenizi girin"
+                required
+              />
+            </div>
+
+            <button type="submit" class="primary-btn" id="submit-btn">
+              Giriş Yap
+            </button>
+          </form>
+
+          <p id="auth-message" class="auth-message"></p>
+        </div>
+      </section>
+    </div>
+
+    <script src="auth.js"></script>
+  </body>
+</html>

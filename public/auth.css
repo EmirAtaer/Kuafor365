@@ -1,0 +1,212 @@
+:root {
+  --bg-gradient: radial-gradient(circle at top left, #fee2e2, #eef2ff, #dcfce7);
+  --card-bg: #ffffff;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --accent: #f97316;
+  --accent-soft: #fef3c7;
+  --border: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page {
+  max-width: 1100px;
+  width: 100%;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 32px;
+}
+
+/* SOL TARAF */
+
+.hero {
+  padding: 32px 24px;
+  color: var(--text-main);
+}
+
+.hero-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f97316, #facc15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.hero-features {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+/* SAĞ TARAF */
+
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 24px 22px 22px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.auth-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+
+.auth-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* TOGGLE GRUPLARI */
+
+.toggle-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background: #f3f4f6;
+  border-radius: 999px;
+  padding: 3px;
+  margin-bottom: 10px;
+}
+
+.toggle-btn {
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.toggle-btn.active {
+  background: #ffffff;
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(148, 163, 184, 0.6);
+}
+
+/* FORM */
+
+.auth-form {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+input:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: transparent;
+}
+
+.primary-btn {
+  margin-top: 4px;
+  border: none;
+  width: 100%;
+  padding: 9px 0;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #f97316, #f59e0b);
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+}
+
+.primary-btn:hover {
+  filter: brightness(1.03);
+}
+
+.auth-message {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+/* Hata / başarı renkleri JS ile inline verilecek */
+
+/* RESPONSIVE */
+
+@media (max-width: 860px) {
+  .page {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+
+  .hero {
+    text-align: center;
+  }
+
+  .hero-icon {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-features {
+    justify-items: center;
+  }
+}

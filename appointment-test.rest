@@ -1,0 +1,25 @@
+### Randevu oluştur
+POST http://localhost:3000/api/appointments
+Content-Type: application/json
+
+{
+  "dateTime": "2025-12-10T14:00:00",
+  "customerId": 1,
+  "barberId": 2,
+  "notes": "Saç kesim + fön"
+}
+
+###
+
+### Tüm randevuları listele
+GET http://localhost:3000/api/appointments
+
+###
+
+### Randevu durumunu güncelle (id = 1, approved)
+PATCH http://localhost:3000/api/appointments/1/status
+Content-Type: application/json
+
+{
+  "status": "approved"
+}

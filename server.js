@@ -12,7 +12,8 @@ const analyticsRoutes = require("./src/routes/analyticsRoutes");
 const expenseRoutes = require("./src/routes/expenseRoutes");
 const authRoutes = require("./src/routes/authRoutes"); 
 const appointmentRoutes = require("./src/routes/appointmentRoutes");
-const barberDayStatusRoutes = require("./src/routes/barberDayStatus"); 
+const barberDayStatusRoutes = require("./src/routes/barberDayStatus");
+const reviewRoutes = require("./src/routes/reviewRoutes"); 
 
 const app = express();
 
@@ -27,9 +28,10 @@ app.use("/api/products", productRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/expenses", expenseRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Kuaför Randevu Sistemi API çalışıyor!");
+  res.send("H&F Karadaş Hair Artist API çalışıyor!");
 });
 
 const PORT = process.env.PORT || 3000;

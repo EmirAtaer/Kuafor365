@@ -12,4 +12,7 @@ router.get("/", appointmentController.getAllAppointments);
 // Randevu durumunu güncelle (onay / iptal)
 router.patch("/:id/status", appointmentController.updateStatus);
 
+// Randevuyu sil (no-show vb.)
+router.delete("/:id", appointmentController.deleteAppointment);
+
 module.exports = router;

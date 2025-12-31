@@ -3,6 +3,9 @@ const { User } = require("../models");
 const sequelize = require("../config/db");
 const { QueryTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
 
 
@@ -139,9 +142,16 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Şifre hatalı." });
     }
 
-    // (JWT yoksa) basitçe user bilgisini dönüyoruz
+    // JWT token oluştur
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     return res.json({
       message: "Giriş başarılı.",
+      token,
       user: {
         id: user.id,
         fullName: user.fullName,
@@ -153,4 +163,22 @@ exports.login = async (req, res) => {
     console.error("login error:", err);
     return res.status(500).json({ message: "Sunucu hatası." });
   }
+};
+
+// JWT DOĞRULAMA MIDDLEWARE
+exports.authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token bulunamadı.' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Geçersiz token.' });
+    }
+    req.user = user; // { id, email, role }
+    next();
+  });
 };

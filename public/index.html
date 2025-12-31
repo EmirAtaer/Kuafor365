@@ -2,25 +2,35 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <title>Kuaför Randevu | Giriş</title>
+    <title>H&F Karadaş Hair Artist | Giriş</title>
     <link rel="stylesheet" href="auth.css" />
   </head>
   <body>
     <div class="page">
       <!-- SOL TARAF -->
       <section class="hero">
-        <div class="hero-icon">✂️</div>
-        <h1 class="hero-title">Kuaför Randevu</h1>
+        <img class="hero-logo" src="assets/karadas.jpeg" alt="H&F Karadaş Hair Artist Logosu" />
+        <h1 class="hero-title">H&F Karadaş Hair Artist</h1>
         <p class="hero-subtitle">
-          Modern kuaför yönetim sistemi. <br />
+          H&F Karadaş Hair Artist yönetim sistemi. <br />
           Randevularınızı kolayca oluşturun ve yönetin.
         </p>
 
         <ul class="hero-features">
           <li>✨ Kolay Randevu</li>
-          <li>📦 Stok Takibi (geliştirilebilir)</li>
+          <li>📦 Stok Takibi</li>
           <li>📊 Profesyonel Yönetim</li>
         </ul>
+
+        <!-- MÜŞTERİ YORUMLARI -->
+        <div class="reviews-section">
+          <h3 class="reviews-title">Müşterilerimizden</h3>
+          <div class="reviews-slider">
+            <div class="reviews-track" id="reviews-track">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- SAĞ TARAF: GİRİŞ / KAYIT KARTI -->
@@ -109,5 +119,49 @@
     </div>
 
     <script src="auth.js"></script>
+    <script>
+      // Yorumları yükle ve kaydır
+      async function loadReviews() {
+        try {
+          const res = await fetch('/api/reviews');
+          const reviews = await res.json();
+          
+          const track = document.getElementById('reviews-track');
+          if (!reviews || reviews.length === 0) {
+            track.innerHTML = '<div class="review-card"><p style="color: #6b7280;">Henüz yorum yok.</p></div>';
+            return;
+          }
+
+          // Yorumları 2 kez ekle (sonsuz döngü için)
+          const allReviews = [...reviews, ...reviews];
+          
+          track.innerHTML = allReviews.map(r => {
+            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+            const customerName = r.customer?.fullName || 'Müşteri';
+            const message = r.message || 'Harika bir deneyimdi!';
+            
+            return `
+              <div class="review-card">
+                <div class="review-stars">${stars}</div>
+                <p class="review-message">${message}</p>
+                <p class="review-author">— ${customerName}</p>
+              </div>
+            `;
+          }).join('');
+
+          // Animasyonu başlat
+          const totalWidth = track.scrollWidth;
+          const duration = totalWidth / 70; // Hız ayarı (px/s) - Orta hız
+          track.style.animation = `slide ${duration}s linear infinite`;
+        } catch (err) {
+          console.error('Yorumlar yüklenirken hata:', err);
+        }
+      }
+
+      loadReviews();
+    </script>
+
+    <!-- Gece Modu Toggle Tuşu -->
+    <button class="dark-mode-toggle" id="dark-mode-toggle" title="Gece Modunu Aç/Kapat">🌙</button>
   </body>
 </html>

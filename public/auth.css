@@ -8,6 +8,16 @@
   --border: #e5e7eb;
 }
 
+body.dark-mode {
+  --bg-gradient: linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d);
+  --card-bg: #1a1a1a;
+  --text-main: #ffffff;
+  --text-muted: #cccccc;
+  --accent: #e07b00;
+  --accent-soft: #e07b00;
+  --border: #333333;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -38,6 +48,7 @@ body {
 .hero {
   padding: 32px 24px;
   color: var(--text-main);
+  position: relative;
 }
 
 .hero-icon {
@@ -57,12 +68,26 @@ body {
   font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 10px;
+  padding-top: 220px;
+}
+
+/* Yuvarlak logo */
+.hero-logo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  top: 20px;
+  left: 120px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
 }
 
 .hero-subtitle {
   font-size: 0.98rem;
   color: var(--text-muted);
-  margin-bottom: 18px;
+  margin-bottom: 15px;
   line-height: 1.5;
 }
 
@@ -109,10 +134,11 @@ body {
 .toggle-group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  background: #f3f4f6;
+  background: rgba(243, 244, 246, 0.8);
   border-radius: 999px;
   padding: 3px;
   margin-bottom: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .toggle-btn {
@@ -123,12 +149,28 @@ body {
   font-size: 0.85rem;
   cursor: pointer;
   color: var(--text-muted);
+  transition: all 0.2s ease;
 }
 
 .toggle-btn.active {
   background: #ffffff;
   color: var(--text-main);
   box-shadow: 0 1px 3px rgba(148, 163, 184, 0.6);
+}
+
+body.dark-mode .toggle-group {
+  background: rgba(60, 60, 60, 0.6);
+  border: 1px solid rgba(100, 100, 100, 0.5);
+}
+
+body.dark-mode .toggle-btn {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .toggle-btn.active {
+  background: rgba(80, 80, 80, 0.8);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* FORM */
@@ -206,7 +248,200 @@ input:focus {
     margin-right: auto;
   }
 
+  .hero-logo {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .hero-features {
     justify-items: center;
+  }
+
+  .reviews-section {
+    margin-top: 20px;
+  }
+}
+
+/* MÜŞTERİ YORUMLARI */
+.reviews-section {
+  margin-top: 48px;
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+.reviews-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text-main);
+  text-align: left;
+  letter-spacing: -0.5px;
+}
+
+.reviews-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 12px 0;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.reviews-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+}
+
+.review-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 300px;
+  max-width: 340px;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.15), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.review-stars {
+  font-size: 1.4rem;
+  color: #fbbf24;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
+}
+
+.review-message {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-style: italic;
+  min-height: 60px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.review-author {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: right;
+  letter-spacing: 0.5px;
+}
+
+/* =====================
+   GECE MODUNDA FORM VE İNPUT STİLLERİ
+   ===================== */
+body.dark-mode .auth-card {
+  background: var(--card-bg);
+  border-color: var(--border);
+  color: var(--text-main);
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="tel"] {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+
+body.dark-mode input[type="text"]::placeholder,
+body.dark-mode input[type="email"]::placeholder,
+body.dark-mode input[type="password"]::placeholder,
+body.dark-mode input[type="tel"]::placeholder {
+  color: var(--text-muted);
+}
+
+body.dark-mode label {
+  color: var(--text-main);
+}
+
+body.dark-mode .toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+
+body.dark-mode .toggle-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+body.dark-mode .primary-btn {
+  background: var(--accent);
+  color: white;
+}
+
+body.dark-mode .auth-text,
+body.dark-mode .form-group label {
+  color: var(--text-main);
+}
+
+body.dark-mode .primary-btn {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.7), rgba(251, 146, 60, 0.7));
+  opacity: 0.9;
+}
+
+body.dark-mode .toggle-btn {
+  opacity: 0.85;
+}
+
+/* =====================
+   GECE MODU TUŞU STİLİ
+   ===================== */
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--border);
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode-toggle:active {
+  transform: scale(0.95);
+}
+
+body.dark-mode .dark-mode-toggle {
+  background: rgba(26, 26, 46, 0.9);
+  border-color: var(--border);
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }

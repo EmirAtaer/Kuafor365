@@ -346,18 +346,10 @@ exports.updateStatus = async (req, res) => {
       }
     }
 
-    // Eğer randevu "cancelled" (iptal) durumuna geçiyorsa ve daha önce onaylanmışsa, stokları iade et
+    // Onaylandıktan sonra iptal edilemesin
     if (status === 'cancelled' && oldStatus === 'approved') {
-      if (appointment.ProductSales && appointment.ProductSales.length > 0) {
-        for (const sale of appointment.ProductSales) {
-          const product = await Product.findByPk(sale.productId, { transaction: t });
-          if (product) {
-            product.stock = product.stock + sale.quantity;
-            product.usageCount = Math.max(0, (product.usageCount || 0) - sale.quantity);
-            await product.save({ transaction: t });
-          }
-        }
-      }
+      await t.rollback();
+      return res.status(400).json({ message: "Onaylanan randevu iptal edilemez." });
     }
 
     await appointment.save({ transaction: t });
@@ -368,5 +360,55 @@ exports.updateStatus = async (req, res) => {
     await t.rollback();
     console.error("updateStatus error:", err);
     res.status(500).json({ message: "Sunucu hatası." });
+  }
+};
+
+// Randevuyu tamamen sil (no-show vb.)
+exports.deleteAppointment = async (req, res) => {
+  const t = await sequelize.transaction();
+  try {
+    const { id } = req.params;
+
+    const appointment = await Appointment.findByPk(id, {
+      include: [
+        { model: ProductSale, as: 'ProductSales' },
+        { model: ServiceSale, as: 'ServiceSales' },
+      ],
+      transaction: t,
+    });
+
+    if (!appointment) {
+      await t.rollback();
+      return res.status(404).json({ message: 'Randevu bulunamadı.' });
+    }
+
+    // Ürün satışları varsa stoğu geri yükle ve usageCount'u azalt
+    if (appointment.ProductSales && appointment.ProductSales.length > 0) {
+      for (const sale of appointment.ProductSales) {
+        const product = await Product.findByPk(sale.productId, { transaction: t });
+        if (product) {
+          product.stock = product.stock + sale.quantity;
+          product.usageCount = Math.max(0, (product.usageCount || 0) - sale.quantity);
+          await product.save({ transaction: t });
+        }
+        await sale.destroy({ transaction: t });
+      }
+    }
+
+    // Hizmet satışlarını temizle
+    if (appointment.ServiceSales && appointment.ServiceSales.length > 0) {
+      for (const sale of appointment.ServiceSales) {
+        await sale.destroy({ transaction: t });
+      }
+    }
+
+    await appointment.destroy({ transaction: t });
+
+    await t.commit();
+    return res.json({ message: 'Randevu silindi (no-show).', id });
+  } catch (err) {
+    await t.rollback();
+    console.error('deleteAppointment error:', err);
+    return res.status(500).json({ message: 'Sunucu hatası.' });
   }
 };

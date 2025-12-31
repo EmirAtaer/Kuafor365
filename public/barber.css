@@ -2,24 +2,44 @@
    GENEL / TOPBAR DOKUNUŞLARI
    ========================= */
 
+:root {
+  --bg-gradient: radial-gradient(circle at top left, #fce7f3, #eef2ff 40%, #f9fafb);
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent: #f97316;
+  --border: #e2e8f0;
+}
+
+body.dark-mode {
+  --bg-gradient: linear-gradient(135deg, #000000, #1a1a1a, #0d0d0d);
+  --card-bg: #1a1a1a;
+  --text-main: #ffffff;
+  --text-muted: #cccccc;
+  --accent: #e07b00;
+  --border: #333333;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  background: radial-gradient(circle at top left, #fce7f3, #eef2ff 40%, #f9fafb);
+  background: var(--bg-gradient);
   margin: 0;
+  color: var(--text-main);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* üst bar yazıları biraz daha modern dursun */
 .topbar-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 .topbar-subtitle {
   font-size: 0.9rem;
   /* HOŞ GELDİN YAZISI: Tema rengine uyumlu hale getirildi (gri yerine hafif morumsu) */
-  color: #8b5cf6; 
+  color: var(--text-muted); 
 }
 
 /* çıkış butonu zaten iyi, sadece ufak iyileştirme */
@@ -49,11 +69,12 @@ body {
 /* tab bar görüntüsü */
 .tab-nav {
   display: flex;
-  background: #eff4ff;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 999px;
   padding: 4px;
   margin: 18px auto 22px;
   max-width: 620px;
+  border: 1px solid var(--border);
 }
 
 .tab-btn {
@@ -64,14 +85,15 @@ body {
   border-radius: 999px;
   font-size: 0.95rem;
   cursor: pointer;
-  color: #4b5563;
+  color: var(--text-muted);
   transition: all 0.18s ease;
 }
 
 .tab-btn.active {
-  background: #ffffff;
+  background: var(--card-bg);
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
-  color: #111827;
+  color: var(--text-main);
+  border: 1px solid var(--border);
 }
 
 /* =========================
@@ -86,10 +108,12 @@ body {
 }
 
 .stat-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 16px 20px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .stat-card.small {
@@ -98,14 +122,14 @@ body {
 
 .stat-title {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .stat-value {
   font-size: 1.8rem;
   font-weight: 700;
   margin-top: 6px;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 /* =========================
@@ -119,10 +143,12 @@ body {
 }
 
 .appointment-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 16px 18px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .appointment-card-header {
@@ -134,6 +160,7 @@ body {
 .appointment-title {
   font-weight: 600;
   font-size: 1.05rem;
+  color: var(--text-main);
 }
 
 .appointment-status-pill {
@@ -166,10 +193,34 @@ body {
   color: #b91c1c;
 }
 
+body.dark-mode .appointment-status-pill--pending {
+  background: rgba(224, 242, 254, 0.2);
+  color: #7dd3fc;
+  opacity: 0.9;
+}
+
+body.dark-mode .appointment-status-pill--approved {
+  background: rgba(220, 252, 231, 0.2);
+  color: #86efac;
+  opacity: 0.9;
+}
+
+body.dark-mode .appointment-status-pill--completed {
+  background: rgba(237, 233, 254, 0.2);
+  color: #c4b5fd;
+  opacity: 0.9;
+}
+
+body.dark-mode .appointment-status-pill--cancelled {
+  background: rgba(254, 226, 226, 0.2);
+  color: #fca5a5;
+  opacity: 0.9;
+}
+
 .appointment-card-body {
   margin-top: 10px;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-muted);
 }
 
 .appointment-row {
@@ -207,8 +258,8 @@ body {
 /* ONAYLA – yeşil */
 .approve-btn {
   /* Onayla: yeşil ve aynı oval boyutta */
-  background: #dcfce7; /* hafif yeşil */
-  color: #166534; /* koyu yeşil yazı */
+  background: #22c55e; /* parlak yeşil */
+  color: #ffffff;
   border: none;
 }
 
@@ -221,8 +272,8 @@ body {
 
 /* İPTAL – kırmızı */
 .cancel-btn {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: #ef4444;
+  color: #ffffff;
 }
 
 /* genel hover */
@@ -242,6 +293,29 @@ body {
   box-shadow: none;
 }
 
+/* Primary button - Hizmetler ve diğer bölümler için */
+.primary-btn {
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.45);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+}
+
 /* =========================
    ÜRÜN YÖNETİMİ BLOĞU
    ========================= */
@@ -255,22 +329,24 @@ body {
 #new-product-btn {
   border-radius: 999px;
   border: none;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: #ffffff;
   padding: 7px 14px;
   font-size: 0.9rem;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(248, 148, 72, 0.35);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
   margin-bottom: 10px;
 }
 
 /* Form kartı (Eksik CSS tamamlandı) */
 #new-product-form {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 14px 18px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   margin-bottom: 24px;
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .modal-form.hidden {
@@ -290,16 +366,22 @@ body {
 .form-group label {
   display: block;
   font-size: 0.85rem;
-  color: #4b5563;
+  color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .form-group input {
   width: 100%;
   padding: 8px 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 8px;
   box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
 }
 
 .primary-btn.full-width {
@@ -317,14 +399,17 @@ body {
   font-size: 0.9rem;
   margin-top: 10px;
   text-align: center;
+  color: var(--text-main);
 }
 
 /* ÜRÜN KARTLARI */
 .product-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 16px 18px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .product-card-header {
@@ -337,50 +422,52 @@ body {
 .product-name {
   font-weight: 600;
   font-size: 1.05rem;
+  color: var(--text-main);
 }
 
 .product-category {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .icon-btn {
-  background: #f3f4f6;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 50%;
   width: 30px;
   height: 30px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: var(--text-main);
 }
 
 .icon-btn:hover {
-  background: #e5e7eb;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .product-price {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #10b981; /* Yeşil fiyat rengi */
+  color: var(--accent); /* Turuncu fiyat rengi */
   margin-bottom: 10px;
 }
 
 .product-stock-line,
 .product-usage-line {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .product-stock-value {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 .product-usage-value {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 .product-stock-update {
@@ -393,9 +480,11 @@ body {
 .product-stock-update .stock-input {
   flex: 1;
   padding: 6px 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
 }
 
 .product-usage-buttons {
@@ -466,6 +555,11 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  background: var(--card-bg);
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .topbar-left {
@@ -480,21 +574,23 @@ body {
 }
 
 .section-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 20px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
   margin-bottom: 24px;
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .section-card h2 {
-  color: #1f2937;
+  color: var(--text-main);
   margin-top: 0;
   margin-bottom: 6px;
 }
 
 .section-card p {
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-top: 0;
   margin-bottom: 18px;
@@ -530,7 +626,7 @@ body {
 
 .section-subheader p {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .appointment-card-completed {
@@ -538,8 +634,13 @@ body {
 }
 
 .status-completed {
-  background: #dcfce7;
-  color: #166534;
+  background: #22c55e;
+  color: #ffffff;
+}
+
+body.dark-mode .status-completed {
+  background: rgba(34, 197, 94, 0.6);
+  opacity: 0.9;
 }
 /* ===========================
    ANALİTİK SEKMESİ
@@ -559,12 +660,12 @@ body {
 .analytics-header h2 {
   font-size: 1.4rem;
   margin: 0;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 .analytics-header p {
   margin: 4px 0 0;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -584,18 +685,22 @@ body {
 
 /* Stat kartları daha yumuşak dursun */
 .analytics-stats-row .stat-card.soft {
-  background: linear-gradient(135deg, #ffffff, #f5f5ff);
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 14px 16px;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 /* Chart kartları */
 .chart-card {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 22px;
   padding: 18px 20px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 /* Büyük chart kartı */
@@ -615,7 +720,7 @@ body {
   margin: 0;
   font-size: 0.98rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-main);
 }
 
 /* Küçük badge / chip */
@@ -630,13 +735,23 @@ body {
 }
 
 .chip-soft {
-  background: #eef2ff;
-  color: #4f46e5;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+body.dark-mode .chip-soft {
+  background: rgba(255, 149, 0, 0.6);
+  opacity: 0.85;
 }
 
 .chip-accent {
-  background: #fff7ed;
-  color: #ea580c;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+body.dark-mode .chip-accent {
+  background: rgba(255, 149, 0, 0.6);
+  opacity: 0.85;
 }
 
 /* Sağ sütun */
@@ -648,12 +763,14 @@ body {
 
 /* Ürün tablosu kartı */
 .analytics-table-card {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 22px;
   padding: 18px 20px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 /* Tablo scroll alanı */
@@ -686,27 +803,29 @@ body {
 .products-table thead {
   position: sticky;
   top: 0;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.05);
   z-index: 1;
+  border-bottom: 1px solid var(--border);
 }
 
 .products-table th,
 .products-table td {
   padding: 8px 10px;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
 }
 
 .products-table th {
   font-weight: 600;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
 .products-table tbody tr:hover {
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.05);
 }
 /* Gün aç/kapat barı */
 .day-status-bar {
@@ -714,27 +833,30 @@ body {
   margin-bottom: 12px;
   padding: 10px 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  color: var(--text-main);
 }
 
 .day-status-left label {
   display: block;
   font-size: 0.8rem;
   font-weight: 500;
-  color: #4b5563;
+  color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .day-status-left input[type="date"] {
   padding: 6px 10px;
   border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   font-size: 0.85rem;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
 }
 
 .day-status-right {
@@ -745,9 +867,15 @@ body {
 
 /* Tehlike tonu chip (gün kapalıyken) */
 .chip-danger {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: #ef4444;
+  color: #ffffff;
 }
+
+body.dark-mode .chip-danger {
+  background: rgba(239, 68, 68, 0.7);
+  opacity: 0.9;
+}
+
 /* ============================
    KUAFÖR – SAAT UYGUNLUK GÖRÜNÜMÜ
 ============================ */
@@ -757,8 +885,10 @@ body {
   margin-bottom: 16px;
   padding: 14px 16px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  color: var(--text-main);
 }
 
 .time-slots-header {
@@ -785,23 +915,38 @@ body {
 
 /* Yeşil: uygun */
 .slot-free {
-  background: #dcfce7;
-  color: #166534;
-  border-color: #bbf7d0;
+  background: #22c55e;
+  color: #ffffff;
+  border-color: #16a34a;
+}
+
+body.dark-mode .slot-free {
+  background: rgba(34, 197, 94, 0.6);
+  border-color: rgba(22, 163, 74, 0.6);
 }
 
 /* Kırmızı: dolu */
 .slot-busy {
-  background: #fee2e2;
-  color: #b91c1c;
-  border-color: #fecaca;
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+body.dark-mode .slot-busy {
+  background: rgba(239, 68, 68, 0.6);
+  border-color: rgba(220, 38, 38, 0.6);
 }
 
 /* Gri: gün kapalı */
 .slot-closed {
-  background: #e5e7eb;
-  color: #4b5563;
-  border-color: #d1d5db;
+  background: var(--text-muted);
+  color: #ffffff;
+  border-color: var(--border);
+}
+
+body.dark-mode .slot-closed {
+  background: rgba(204, 204, 204, 0.4);
+  border-color: rgba(51, 51, 51, 0.6);
 }
 
 /* Açıklama satırı */
@@ -824,4 +969,145 @@ body {
   height: 10px;
   padding: 0;
   border-radius: 999px;
+}
+
+/* =====================
+   GECE MODUNDA FORM VE İNPUT STİLLERİ
+   ===================== */
+body.dark-mode .section-card {
+  background: var(--card-bg);
+  border-color: var(--border);
+  color: var(--text-main);
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="tel"],
+body.dark-mode input[type="date"],
+body.dark-mode input[type="number"],
+body.dark-mode textarea,
+body.dark-mode select {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+
+body.dark-mode input[type="text"]::placeholder,
+body.dark-mode input[type="email"]::placeholder,
+body.dark-mode input[type="password"]::placeholder,
+body.dark-mode input[type="tel"]::placeholder,
+body.dark-mode input[type="date"]::placeholder,
+body.dark-mode input[type="number"]::placeholder,
+body.dark-mode textarea::placeholder {
+  color: var(--text-muted);
+}
+
+body.dark-mode label {
+  color: var(--text-main);
+}
+
+body.dark-mode .modal {
+  background: var(--card-bg);
+  color: var(--text-main);
+}
+
+body.dark-mode .modal-backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+body.dark-mode .chip,
+body.dark-mode .status-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+
+body.dark-mode .appointment-card,
+body.dark-mode .product-card,
+body.dark-mode .service-item,
+body.dark-mode .stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+  color: var(--text-main);
+}
+
+body.dark-mode .outline-btn {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.7), rgba(251, 146, 60, 0.7));
+  box-shadow: 0 6px 18px rgba(248, 148, 72, 0.2);
+  opacity: 0.9;
+}
+
+body.dark-mode #new-product-btn {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.7), rgba(251, 146, 60, 0.7));
+  box-shadow: 0 4px 12px rgba(248, 148, 72, 0.2);
+  opacity: 0.85;
+}
+
+body.dark-mode .approve-btn {
+  background: rgba(34, 197, 94, 0.8);
+  opacity: 0.9;
+}
+
+body.dark-mode .cancel-btn {
+  background: rgba(239, 68, 68, 0.8);
+  opacity: 0.9;
+}
+
+body.dark-mode .complete-btn {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(124, 58, 237, 0.8));
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+  opacity: 0.9;
+}
+
+body.dark-mode .primary-btn {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.7), rgba(251, 146, 60, 0.7)) !important;
+  box-shadow: 0 4px 12px rgba(248, 148, 72, 0.2) !important;
+  opacity: 0.85 !important;
+}
+
+body.dark-mode .primary-btn.full-width {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.7), rgba(251, 146, 60, 0.7));
+  box-shadow: 0 4px 12px rgba(248, 148, 72, 0.2);
+  opacity: 0.85;
+}
+
+body.dark-mode .small-btn {
+  opacity: 0.85;
+}
+
+/* =====================
+   GECE MODU TUŞU STİLİ
+   ===================== */
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--border);
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode-toggle:active {
+  transform: scale(0.95);
+}
+
+body.dark-mode .dark-mode-toggle {
+  background: rgba(26, 26, 46, 0.9);
+  border-color: var(--border);
 }

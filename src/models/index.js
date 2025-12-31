@@ -7,8 +7,8 @@ const ProductSale = require('./ProductSale');
 const ServiceSale = require('./ServiceSale');
 const Expense = require('./Expense');
 const BarberDayStatus = require('./BarberDayStatus');
-// Yeni eklediğimiz model:
-const BarberInviteCode = require('./BarberInviteCode'); 
+const BarberInviteCode = require('./BarberInviteCode');
+const Review = require('./Review'); 
 
 // --- İLİŞKİLER ---
 
@@ -40,9 +40,13 @@ ServiceSale.belongsTo(Service, { foreignKey: 'serviceId', as: 'Service' });
 Appointment.hasMany(ServiceSale, { foreignKey: 'appointmentId', as: 'ServiceSales' });
 ServiceSale.belongsTo(Appointment, { foreignKey: 'appointmentId', as: 'Appointment' });
 
-// 6. BarberDayStatus (db tablosu "barber_day_status")
-// Model BarberDayStatus (barber_id, date, is_open) yönetimi için
-// ilişki eklemiyoruz ama model export edilmesi yeterli
+// 8. User -> Review
+User.hasMany(Review, { foreignKey: 'customerId', as: 'reviews' });
+Review.belongsTo(User, { foreignKey: 'customerId', as: 'customer' });
+
+// 9. Appointment -> Review
+Appointment.hasOne(Review, { foreignKey: 'appointmentId', as: 'review' });
+Review.belongsTo(Appointment, { foreignKey: 'appointmentId', as: 'appointment' });
 
 module.exports = {
     sequelize,
@@ -54,5 +58,6 @@ module.exports = {
     ServiceSale,
     Expense,
     BarberDayStatus,
-    BarberInviteCode // Bunu dışarı aktarmayı unutma!
+    BarberInviteCode,
+    Review
 };

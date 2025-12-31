@@ -1,3 +1,40 @@
+// =======================================
+// GECE MODU FONKSİYONLARI
+// =======================================
+function initDarkMode() {
+  const savedDarkMode = localStorage.getItem("darkMode");
+  
+  // Eğer daha önce gece modu açılmışsa, sayfa açılırken uygula
+  if (savedDarkMode === "true") {
+    document.body.classList.add("dark-mode");
+  }
+  
+  // DOM yüklendikten sonra buton event listener'ı ekle
+  document.addEventListener("DOMContentLoaded", () => {
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
+    
+    if (darkModeToggle) {
+      // İkonu ayarla
+      const isDarkMode = document.body.classList.contains("dark-mode");
+      darkModeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+      
+      // Toggle butonuna tıklama olayı ekle
+      darkModeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode);
+        
+        // İkon değiştir
+        darkModeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+      });
+    }
+  });
+}
+
+// Sayfa yüklendiğinde gece modu başlat
+initDarkMode();
+// =======================================
+
 // ===============================
 //  MÜŞTERİ PANELİ JAVASCRIPT
 // ===============================
@@ -268,6 +305,10 @@ async function loadAppointments() {
       const serviceText =
         (appt.notes && appt.notes.split(" | ")[0]) || "Hizmet";
 
+      const reviewButton = appt.status === 'completed' 
+        ? `<button class="primary-btn" style="font-size: 0.8rem; padding: 6px 12px;" onclick="openReviewModal(${appt.id})">Bizi Değerlendirmek İster Misiniz?</button>` 
+        : `<button class="cancel-btn" data-id="${appt.id}">İptal Et</button>`;
+
       item.innerHTML = `
         <div class="appointment-main">
           <div class="appointment-service">${serviceText}</div>
@@ -276,7 +317,7 @@ async function loadAppointments() {
         </div>
         <div class="appointment-right">
           <div class="appointment-status">${statusText}</div>
-          <button class="cancel-btn" data-id="${appt.id}">İptal Et</button>
+          ${reviewButton}
         </div>
       `;
 
@@ -542,6 +583,128 @@ async function loadServices() {
     serviceSelect.appendChild(opt);
   }
 }
+
+// ===============================
+//  DEĞERLENDİRME MODAL
+// ===============================
+const reviewModal = document.getElementById('review-modal');
+const closeReviewModal = document.getElementById('close-review-modal');
+const reviewForm = document.getElementById('review-form');
+const reviewRatingInput = document.getElementById('review-rating');
+const reviewAppointmentIdInput = document.getElementById('review-appointment-id');
+const reviewMessageInput = document.getElementById('review-message');
+const reviewModalMessage = document.getElementById('review-modal-message');
+const stars = document.querySelectorAll('.star');
+
+// Yıldız seçimi
+let selectedRating = 0;
+stars.forEach(star => {
+  star.addEventListener('click', function() {
+    selectedRating = parseInt(this.dataset.value);
+    reviewRatingInput.value = selectedRating;
+    
+    stars.forEach(s => {
+      if (parseInt(s.dataset.value) <= selectedRating) {
+        s.classList.add('active');
+      } else {
+        s.classList.remove('active');
+      }
+    });
+  });
+
+  star.addEventListener('mouseenter', function() {
+    const hoverValue = parseInt(this.dataset.value);
+    stars.forEach(s => {
+      if (parseInt(s.dataset.value) <= hoverValue) {
+        s.style.color = '#fbbf24';
+      } else {
+        s.style.color = '#d1d5db';
+      }
+    });
+  });
+});
+
+document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+  stars.forEach(s => {
+    if (parseInt(s.dataset.value) <= selectedRating) {
+      s.style.color = '#fbbf24';
+    } else {
+      s.style.color = '#d1d5db';
+    }
+  });
+});
+
+// Modal açma fonksiyonu
+function openReviewModal(appointmentId) {
+  reviewAppointmentIdInput.value = appointmentId;
+  reviewRatingInput.value = 0;
+  reviewMessageInput.value = '';
+  selectedRating = 0;
+  stars.forEach(s => s.classList.remove('active'));
+  reviewModalMessage.textContent = '';
+  reviewModal.style.display = 'flex';
+}
+
+// Modal kapatma (sadece modal backdrop tıklandığında)
+window.addEventListener('click', (e) => {
+  if (e.target === reviewModal) {
+    reviewModal.style.display = 'none';
+  }
+});
+
+// Değerlendirme gönder
+if (reviewForm) {
+  reviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const rating = parseInt(reviewRatingInput.value);
+    const message = reviewMessageInput.value.trim();
+    const appointmentId = reviewAppointmentIdInput.value;
+
+    if (!rating || rating < 1 || rating > 5) {
+      reviewModalMessage.textContent = 'Lütfen bir puan seçin (1-5 yıldız).';
+      reviewModalMessage.style.color = '#dc2626';
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('authToken');
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          appointmentId: appointmentId || null,
+          rating,
+          message
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        reviewModalMessage.textContent = 'Değerlendirmeniz kaydedildi. Teşekkürler!';
+        reviewModalMessage.style.color = '#16a34a';
+        setTimeout(() => {
+          reviewModal.style.display = 'none';
+          loadAppointments(); // Listeyi yenile
+        }, 1500);
+      } else {
+        reviewModalMessage.textContent = data.message || 'Bir hata oluştu.';
+        reviewModalMessage.style.color = '#dc2626';
+      }
+    } catch (err) {
+      console.error('Değerlendirme hatası:', err);
+      reviewModalMessage.textContent = 'Sunucu hatası.';
+      reviewModalMessage.style.color = '#dc2626';
+    }
+  });
+}
+
+// Değerlendirme butonunu randevu listesine ekle
+window.openReviewModal = openReviewModal;
 
 // ===============================
 //  SAYFA YÜKLENİNCE

@@ -2,7 +2,7 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <title>Müşteri Paneli | Kuaför Randevu</title>
+    <title>Müşteri Paneli | H&F Karadaş Hair Artist</title>
     <link rel="stylesheet" href="dashboard.css" />
   </head>
   <body>
@@ -209,6 +209,44 @@
       </div>
     </div>
 
+    <!-- DEĞERLENDİRME MODAL -->
+    <div id="review-modal" class="modal">
+      <div class="modal-content review-modal-content">
+        <h2 class="review-modal-title">Bizi Değerlendirmek İster Misiniz?</h2>
+        <form id="review-form">
+          <div class="form-group">
+            <div class="star-rating" id="star-rating">
+              <span class="star" data-value="1">★</span>
+              <span class="star" data-value="2">★</span>
+              <span class="star" data-value="3">★</span>
+              <span class="star" data-value="4">★</span>
+              <span class="star" data-value="5">★</span>
+            </div>
+            <input type="hidden" id="review-rating" value="0" />
+            <input type="hidden" id="review-appointment-id" value="" />
+          </div>
+
+          <div class="form-group">
+            <label for="review-message" class="review-label">Deneyiminizi Paylaşın</label>
+            <textarea
+              id="review-message"
+              rows="6"
+              class="review-textarea"
+              placeholder="Yorumunuzu buraya yazın..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="primary-btn full-width review-submit-btn">
+            Gönder
+          </button>
+        </form>
+        <p id="review-modal-message" class="modal-message"></p>
+      </div>
+    </div>
+
     <script src="dashboard.js"></script>
+
+    <!-- Gece Modu Toggle Tuşu -->
+    <button class="dark-mode-toggle" id="dark-mode-toggle" title="Gece Modunu Aç/Kapat">🌙</button>
   </body>
 </html>

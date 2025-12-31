@@ -1,3 +1,36 @@
+// =======================================
+// GECE MODU FONKSİYONLARI
+// =======================================
+function initDarkMode() {
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const savedDarkMode = localStorage.getItem("darkMode");
+  
+  // Eğer daha önce gece modu açılmışsa, sayfa açılırken uygula
+  if (savedDarkMode === "true") {
+    document.body.classList.add("dark-mode");
+  }
+  
+  // Toggle butonuna tıklama olayı ekle
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDarkMode = document.body.classList.contains("dark-mode");
+      localStorage.setItem("darkMode", isDarkMode);
+      
+      // İkon değiştir
+      darkModeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+    });
+    
+    // İkonu ayarla
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    darkModeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+  }
+}
+
+// Sayfa yüklendiğinde gece modu başlat
+document.addEventListener("DOMContentLoaded", initDarkMode);
+// =======================================
+
 // Rol ve mod state
 let currentRole = "customer"; // "customer" | "barber"
 let currentMode = "login"; // "login" | "register"

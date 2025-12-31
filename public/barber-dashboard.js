@@ -1,3 +1,40 @@
+// =======================================
+// GECE MODU FONKSİYONLARI
+// =======================================
+function initDarkMode() {
+  const savedDarkMode = localStorage.getItem("darkMode");
+  
+  // Eğer daha önce gece modu açılmışsa, sayfa açılırken uygula
+  if (savedDarkMode === "true") {
+    document.body.classList.add("dark-mode");
+  }
+  
+  // DOM yüklendikten sonra buton event listener'ı ekle
+  document.addEventListener("DOMContentLoaded", () => {
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
+    
+    if (darkModeToggle) {
+      // İkonu ayarla
+      const isDarkMode = document.body.classList.contains("dark-mode");
+      darkModeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+      
+      // Toggle butonuna tıklama olayı ekle
+      darkModeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode);
+        
+        // İkon değiştir
+        darkModeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+      });
+    }
+  });
+}
+
+// Sayfa yüklendiğinde gece modu başlat
+initDarkMode();
+// =======================================
+
 // ===============================
 //  KUAFÖR PANELİ JAVASCRIPT
 // ===============================
@@ -206,7 +243,6 @@ async function loadAppointments(selectedDate = null) {
         } else if (appt.status === "approved") {
           actionsHtml = `
             <button class="complete-btn small-btn" data-id="${appt.id}">Tamamlandı</button>
-            <button class="cancel-btn small-btn" data-id="${appt.id}">İptal Et</button>
           `;
         }
 
@@ -294,6 +330,9 @@ async function loadAppointments(selectedDate = null) {
                 `).join('')}
               </div>
             ` : ''}
+          </div>
+          <div class="appointment-card-footer">
+            <button class="no-show-btn small-btn" data-id="${appt.id}">Gelmedi</button>
           </div>
         `;
 
@@ -388,11 +427,13 @@ async function refreshDayOverview() {
     const apptRes = await fetch(`/api/appointments?date=${dateStr}`);
     const allAppointments = apptRes.ok ? await apptRes.json() : [];
 
+    // Sadece iptal edilmemiş randevuları dikkate al (busy olarak say)
     const appointmentsForDay = allAppointments.filter((appt) => {
       if (!appt.dateTime) return false;
       const d = new Date(appt.dateTime);
       const ymd = d.toISOString().split("T")[0];
-      return ymd === dateStr;
+      if (ymd !== dateStr) return false;
+      return appt.status !== 'cancelled';
     });
 
     renderTimeSlots(dateStr, isOpen, appointmentsForDay);
@@ -442,6 +483,38 @@ appointmentsContainer.addEventListener("click", (e) => {
     updateAppointmentStatus(id, "cancelled");
   }
 });
+
+// Tamamlanan randevular için (no-show => sil)
+if (completedAppointmentsContainer) {
+  completedAppointmentsContainer.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('no-show-btn')) {
+      const id = e.target.dataset.id;
+      const ok = confirm('Bu randevu gelmedi olarak işaretlenip silinsin mi?');
+      if (!ok) return;
+      await deleteAppointment(id);
+    }
+  });
+}
+
+// Randevuyu sil (no-show)
+async function deleteAppointment(id) {
+  try {
+    const res = await fetch(`/api/appointments/${id}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.message || 'Randevu silinemedi.');
+      return;
+    }
+    await loadAppointments(dayStatusDateInput.value || null);
+    await loadAnalytics(getSelectedWeekStart());
+    if (dayStatusDateInput && dayStatusDateInput.value) {
+      await refreshDayOverview();
+    }
+  } catch (err) {
+    console.error('deleteAppointment error:', err);
+    alert('Sunucu hatası.');
+  }
+}
 
 // ===============================
 //  ÜRÜN YÖNETİMİ

@@ -1,7 +1,7 @@
 # Kuafor365
 
 
-Kuaför360, yerel kuaförlerin randevu, hizmet ve gelir yönetimini tek panelden yürütmesini sağlayan tam yığın bir web uygulamasıdır. Sistem hem müşteri hem de yönetici girişleri sunar.
+Kuaför365, yerel kuaförlerin randevu, hizmet ve gelir yönetimini tek panelden yürütmesini sağlayan tam yığın bir web uygulamasıdır. Sistem hem müşteri hem de yönetici girişleri sunar.
 
 ## Özellikler
 - Saat 10:00-22:00 arası 60 dakikalık slotlarla çakışmasız randevu planlama
